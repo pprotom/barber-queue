@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101715">
+  <meta name="description" content="จองคิวร้านตัดผม เลือกบริการ ช่าง วัน และเวลาที่สะดวก">
+  <title>ตัดดี — จองคิวร้านตัดผม</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="ตัดดี หน้าหลัก"><span class="brand-mark">ต</span><span>ตัด<span class="brand-accent">ดี</span><small>BARBER STUDIO</small></span></a>
+    <nav><a href="#services">บริการ</a><a href="#booking">จองคิว</a><button class="nav-admin" id="admin-open">จัดการคิว <span aria-hidden="true">↗</span></button></nav>
+  </header>
+  <main id="home">
+    <section class="hero wrap">
+      <div class="hero-copy"><span class="eyebrow"><i></i> BARBER STUDIO · OPEN DAILY 10:00–20:00</span><h1>ทรงที่ใช่<br>เริ่มต้นที่<span>คิวของคุณ</span></h1><p>จองคิวตัดผมง่าย ๆ เลือกบริการ ช่าง และเวลาที่สะดวก แล้วแวะมาหล่อได้เลย</p><a class="button button-primary" href="#booking">จองคิวเลย <span>↓</span></a><div class="hero-note"><span class="avatar-stack"><i>✂</i><i>✦</i><i>✓</i></span><span>เลือกเวลาได้ล่วงหน้า<br><b>ไม่ต้องรอหน้าร้าน</b></span></div></div>
+      <div class="hero-art" aria-label="ภาพประกอบร้านตัดผม"><div class="art-circle"></div><div class="art-card"><span class="art-label">YOUR NEXT<br>FRESH CUT</span><span class="art-scissors">✂</span><span class="art-number">01 <i>/ 03</i></span></div><div class="art-sticker">LOOK<br>SHARP<br><b>✦</b></div></div>
+    </section>
+    <section class="services wrap" id="services"><div class="section-heading"><div><span class="eyebrow">OUR SERVICES</span><h2>เลือกบริการที่ใช่</h2></div><p>งานละเอียด ใส่ใจทุกทรง<br>พร้อมดูแลคุณทุกวัน</p></div><div class="service-grid" id="service-cards"></div></section>
+    <section class="booking-section" id="booking"><div class="wrap booking-layout"><div class="booking-intro"><span class="eyebrow">BOOK AN APPOINTMENT</span><h2>จองคิว<br>ในไม่กี่ขั้นตอน</h2><p>เลือกบริการ ช่าง และเวลาที่สะดวก<br>ระบบจะช่วยเช็กคิวว่างให้ทันที</p><div class="booking-help"><span>✦</span><div><b>ยืดหยุ่นได้</b><small>เปลี่ยนใจหรือยกเลิกคิวได้จากรายการนัด</small></div></div></div>
+      <form class="booking-card" id="booking-form">
+        <div class="form-head"><div><span class="step">01 <i>—</i> 03</span><h3>รายละเอียดการจอง</h3></div><span class="required-note">* จำเป็น</span></div>
+        <label class="field-label" for="service-select">บริการ <em>*</em></label><select id="service-select" required></select>
+        <div class="field-row"><div><label class="field-label" for="barber-select">ช่าง <em>*</em></label><select id="barber-select" required></select></div><div><label class="field-label" for="date-select">วันที่ <em>*</em></label><input id="date-select" type="date" required></div></div>
+        <div class="field-label slot-label">เวลาที่สะดวก <em>*</em><span id="slot-hint">เลือกวันที่และช่างก่อน</span></div><div class="time-grid" id="time-slots" role="radiogroup" aria-label="เลือกเวลา"></div><input id="time-select" type="hidden" required>
+        <div class="divider"></div><p class="form-subhead">ข้อมูลติดต่อ</p>
+        <div class="field-row"><div><label class="field-label" for="customer-name">ชื่อ-นามสกุล <em>*</em></label><input id="customer-name" type="text" placeholder="ชื่อของคุณ" autocomplete="name" required maxlength="60"></div><div><label class="field-label" for="customer-phone">เบอร์โทรศัพท์ <em>*</em></label><input id="customer-phone" type="tel" placeholder="08X-XXX-XXXX" autocomplete="tel" required maxlength="20"></div></div>
+        <label class="field-label" for="customer-note">หมายเหตุ <span class="optional">(ไม่บังคับ)</span></label><textarea id="customer-note" rows="2" placeholder="เช่น ทรงผมที่ต้องการ"></textarea>
+        <div class="booking-summary" id="booking-summary"><span>เลือกบริการเพื่อดูสรุป</span></div>
+        <button class="button button-dark submit-button" type="submit">ยืนยันการจอง <span>→</span></button><p class="privacy-note">ข้อมูลการจองจะถูกบันทึกในเบราว์เซอร์เครื่องนี้</p>
+      </form>
+    </div></section>
+    <section class="appointments wrap" id="my-appointments"><div class="section-heading"><div><span class="eyebrow">YOUR BOOKINGS</span><h2>รายการนัดในเครื่องนี้</h2></div><button class="text-button" id="refresh-bookings">รีเฟรชรายการ ↻</button></div><div id="customer-bookings" class="appointment-list"></div></section>
+  </main>
+  <footer><div class="wrap footer-inner"><a class="brand" href="#home"><span class="brand-mark">ต</span><span>ตัด<span class="brand-accent">ดี</span><small>BARBER STUDIO</small></span></a><span>ทรงดี เริ่มที่การจองคิวที่ดี</span><span>© <span id="year"></span> ตัดดี</span></div></footer>
+  <dialog id="admin-dialog" class="admin-dialog"><div class="dialog-head"><div><span class="eyebrow">BARBER DASHBOARD</span><h2>จัดการคิว</h2></div><button class="icon-button" id="admin-close" aria-label="ปิด">×</button></div><div class="admin-stats" id="admin-stats"></div><div class="admin-toolbar"><label for="admin-date">แสดงคิววันที่</label><input type="date" id="admin-date"><button class="text-button" id="show-all">ดูทั้งหมด</button></div><div id="admin-bookings" class="admin-list"></div><p class="demo-warning">โหมดทดลอง: ข้อมูลเก็บในเบราว์เซอร์และไม่ซิงก์ข้ามเครื่อง ไม่มีระบบเข้าสู่ระบบจริง</p></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
