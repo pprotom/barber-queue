@@ -1,23 +1,31 @@
 # ตัดดี — ระบบจองคิวร้านตัดผม
 
-เว็บแอปต้นแบบภาษาไทยสำหรับให้ลูกค้าเลือกบริการ ช่าง วันและเวลาว่าง พร้อมให้ร้านดูและยกเลิกรายการนัด
+เว็บจองคิวเชื่อม Supabase Auth และ Database แล้ว โดยใช้ publishable key ฝั่งหน้าเว็บ, RLS และ RPC ป้องกันคิวทับซ้อน
 
-## ทดลองใช้งาน
+## ขั้นตอนเปิดใช้งาน
 
-- เปิด [ระบบจองคิว](https://pprotom.github.io/barber-queue/) หลังเปิด GitHub Pages หรือดาวน์โหลดไฟล์ `index.html`, `styles.css` และ `app.js` มาไว้ในโฟลเดอร์เดียวกัน แล้วเปิด `index.html` ในเบราว์เซอร์
-- เลือกบริการ ช่าง วันที่ และเวลาที่ว่าง กรอกชื่อกับเบอร์โทรศัพท์ แล้วกด **ยืนยันการจอง**
-- ดูรายการนัดด้านล่างหน้าเว็บ หรือกด **จัดการคิว** เพื่อดูคิววันที่เลือกและยกเลิกคิว
+1. เปิด Supabase SQL Editor: https://supabase.com/dashboard/project/vfawyvszzhlhrhtfzurg/sql/new
+2. รัน `supabase/migrations/20261127_public_slot_availability.sql` หลังจาก schema หลักถูกติดตั้งแล้ว (ไฟล์ `supabase/schema.sql`). RPC นี้เปิดเผยเฉพาะช่วงเวลาที่ถูกจอง ไม่เปิดเผยข้อมูลลูกค้า
+3. ใน Supabase ไปที่ **Authentication → URL Configuration** แล้วเพิ่ม Site URL ของเว็บและ Redirect URL ที่ใช้งาน
+4. เปิด GitHub repository **Settings → Pages**, เลือก Source เป็น **GitHub Actions**. Workflow จะเผยแพร่เว็บหลัง push
+5. เปิดเว็บ กด **เข้าสู่ระบบ → สมัครสมาชิก**. การจองและรายการนัดจะผูกกับบัญชีที่เข้าสู่ระบบ
+6. หลังสมัครบัญชีเจ้าของร้านและยืนยันอีเมลแล้ว ตั้งเป็น admin จาก Supabase SQL Editor:
 
-## เปิด GitHub Pages
+   ```sql
+   update public.profiles set role = 'admin'
+   where id = (select id from auth.users where email = 'owner@example.com');
+   ```
 
-ใน repository ไปที่ **Settings → Pages** แล้วเลือก **Deploy from a branch**, branch `main`, folder `/ (root)` และกด **Save**. เมื่อเผยแพร่เสร็จ เว็บไซต์จะอยู่ที่ `https://pprotom.github.io/barber-queue/`.
+   ใช้อีเมลจริงแทนตัวอย่าง และรันคำสั่งนี้ใน Supabase Dashboard เท่านั้น อย่าเปิดการแก้ role ให้ client
 
-## ขอบเขตระบบต้นแบบ
+## ความปลอดภัยและขอบเขต
 
-- บริการตัวอย่าง 6 แบบและช่าง 3 คน (แก้ไขได้ที่ตัวแปร `SERVICES` และ `BARBERS` ใน `app.js`)
-- เวลาทำการ 10:00–20:00 ทุกวัน และแสดงเวลาที่จองซ้อนกับคิวเดิมเป็นเวลาที่ไม่ว่าง
-- ข้อมูลจัดเก็บใน `localStorage` ของเบราว์เซอร์เครื่องนั้นเท่านั้น จึงไม่ซิงก์ระหว่างลูกค้า/อุปกรณ์ และไม่เหมาะใช้เก็บข้อมูลจริงโดยไม่มี backend
-- หน้าจัดการคิวเป็นเครื่องมือสาธิต ไม่มีระบบล็อกอินหรือการควบคุมสิทธิ์
-- ฟอนต์ Google Fonts จะโหลดเมื่อเชื่อมต่ออินเทอร์เน็ต
+- `config.js` มีเฉพาะ Project URL และ publishable key ซึ่งตั้งใจให้ browser ใช้ได้; ห้ามใส่ `service_role` key หรือ database password ลงใน repository
+- ตารางนัดใช้ RLS และ exclusion constraint ใน PostgreSQL ทำให้คิวช่างคนเดียวกันไม่สามารถทับเวลาพร้อมกันได้ แม้มีผู้จองพร้อมกันจากหลายอุปกรณ์
+- การสร้าง/ยกเลิกนัดผ่าน RPC ที่ตรวจตัวตนและสิทธิ์
+- ระบบแจ้ง LINE/อีเมลและ custom domain ยังไม่ได้ตั้งค่า
+- ก่อนรับข้อมูลจริง ควรตรวจ auth settings, privacy policy, การยืนยันอีเมล, retention และทดสอบด้วยบัญชีลูกค้า/admin แยกกัน
 
-สำหรับใช้งานจริง ควรเพิ่ม backend/database, ระบบยืนยันตัวตนและสิทธิ์ผู้ดูแล, การแจ้งเตือน และนโยบายคุ้มครองข้อมูลส่วนบุคคลก่อน
+## Custom domain
+
+ต้องมีโดเมนที่คุณเป็นเจ้าของ จากนั้นใส่ใน **Settings → Pages → Custom domain**, ตั้ง DNS ที่ผู้ให้บริการโดเมน และรอ GitHub ตรวจสอบก่อนเปิด Enforce HTTPS. เพิ่ม URL ของโดเมนใน Supabase Auth Redirect URLs ด้วย
